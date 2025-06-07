@@ -1,0 +1,162 @@
+---
+export interface Props {
+  personalInfo: {
+    name: string;
+    lastName?: string;
+    email: string;
+    phone: string;
+    linkedin: string;
+    location: string;
+    image?: { src: string; alt: string };
+  };
+}
+const { personalInfo } = Astro.props;
+
+const contacts = [
+  {
+    icon: "fas fa-envelope",
+    label: personalInfo.email,
+    href: `mailto:${personalInfo.email}`,
+    class: "contact__email-link",
+    showLink: true,
+  },
+  {
+    icon: "fas fa-phone",
+    label: personalInfo.phone,
+    href: `tel:${personalInfo.phone}`,
+    class: "contact__phone-link",
+    showLink: true,
+  },
+  {
+    icon: "fab fa-linkedin-in",
+    label: personalInfo.linkedin,
+    href: `https://www.linkedin.com/${personalInfo.linkedin}`,
+    class: "contact__linkedin-link",
+    showLink: true,
+    target: "_blank",
+  },
+  {
+    icon: "fas fa-map-marker-alt",
+    label: personalInfo.location,
+    showLink: true,
+  },
+];
+---
+
+<header class="cv__header grid grid-cols-12">
+  <div class="cv__header-left col-span-4">
+    <figure class="cv__photo-container">
+      {
+        personalInfo.image && (
+          <img
+            src={`./${personalInfo.image.src}`}
+            alt={personalInfo.image.alt}
+            class="cv__photo"
+          />
+        )
+      }
+    </figure>
+    <h1 class="cv__name">{personalInfo.name}</h1>
+  </div>
+
+  <div class="cv__header-right col-span-8">
+    <div class="contact">
+      <ul class="contact__list">
+        {
+          contacts.map(
+            (contact, index) =>
+              contact.showLink && (
+                <li class="contact__item">
+                  <a
+                    href={contact.href}
+                    class={`${contact.class} contact__link`}
+                    target={contact.target}
+                    style={`margin-left: calc(20px*${index});`}
+                  >
+                    <i class={`${contact.icon} contact__icon`} />
+                    <span class="contact__txt">{contact.label}</span>
+                  </a>
+                </li>
+              )
+          )
+        }
+      </ul>
+    </div>
+  </div>
+</header>
+
+<style lang="scss">
+  .cv {
+    &__header {
+      // padding: 55px 0 55px 55px;
+      padding: 103px 0 55px 55px;
+    }
+    &__header-left {
+      text-align: center;
+    }
+    &__header-right {
+    }
+    &__photo {
+      width: 211px;
+      height: 211px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    &__name {
+      line-height: 1.25;
+      font-size: 21px;
+      max-width: 241px;
+      margin: 0 auto;
+    }
+  }
+  .contact {
+    margin-left: auto;
+    width: 640px;
+    height: 100%;
+    background-color: #c2c2c4;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 10% 100%);
+    &__list {
+      list-style: none;
+      padding-left: 60px;
+      padding-top: 35px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    &__item {
+    }
+    &__link {
+      display: flex;
+      align-items: center;
+      column-gap: 15px;
+      color: #231f20;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    &__email-link,
+    &__linkedin-link {
+      .contact__txt {
+        text-decoration: underline;
+      }
+    }
+    &__icon {
+      background-color: #231f20;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__txt {
+      // font-size: 18px;
+      font-weight: 500;
+      line-height: 1.5;
+      padding-bottom: 0.25rem;
+    }
+  }
+</style>

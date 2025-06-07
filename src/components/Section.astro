@@ -1,0 +1,76 @@
+---
+const { title, iconClass, sectionClass = "" } = Astro.props;
+---
+
+<section class={`section mb-4 ${sectionClass}`}>
+  <div class="section-header">
+    <div class="hexagon">
+      <i class={iconClass}></i>
+    </div>
+    <h3 class="section-header__title">{title}</h3>
+  </div>
+  <div class="section-content">
+    <slot />
+  </div>
+</section>
+<style lang="scss">
+  .hexagon {
+    width: 71px;
+    height: 82px;
+    background: #bdbdbd;
+    position: relative;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hexagon i {
+    color: #231f20;
+    font-size: 24px;
+  }
+  .section {
+    // margin-bottom: 1.5rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    margin-bottom: 0.5rem;
+    &__title {
+      position: relative;
+      font-size: 24px;
+      margin-bottom: 1.75rem;
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -24px;
+        width: 351px;
+        height: 4px;
+        background-color: #000;
+      }
+    }
+  }
+  .section-content {
+    // width: 420px;
+    width: 430px;
+    padding-left: 1rem;
+  }
+  .presentation {
+    .section-content {
+      // font-size: 20px;
+      font-size: 18px;
+    }
+  }
+
+  .experience {
+    .section-content {
+      width: 440px;
+    }
+  }
+  .projects {
+    .section-content {
+      width: 480px;
+    }
+  }
+</style>

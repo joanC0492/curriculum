@@ -1,11 +1,357 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// import Welcome from "../components/Welcome.astro";
+import Layout from "../layouts/Layout.astro";
+import { cvData } from "../data/cvData.js";
+import CvHeader from "../components/CvHeader.astro";
+import Section from "../components/Section.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+  <div class="cv" id="cv-to-print">
+    <CvHeader personalInfo={cvData.personalInfo} />
+
+    <div class="cv__content-container grid grid-cols-12">
+      <div class="cv__content cv__content--left col-span-6">
+        <Section
+          title="PRESENTACIÓN"
+          iconClass="fa-solid fa-user"
+          sectionClass="presentation"
+        >
+          <div set:html={cvData.personalInfo.presentation} />
+        </Section>
+
+        <Section
+          title="HABILIDADES"
+          iconClass="fa-solid fa-laptop-code"
+          sectionClass="skills"
+        >
+          <ul class="skills-list pt-2 grid grid-cols-2">
+            {
+              cvData.skills.map((skill) => (
+                <li class="skills-list__item">
+                  <span class="skills-list__name">{skill.name}</span>
+                  <div class="skills-list__bar-container">
+                    <div
+                      class="skills-list__bar"
+                      style={`width: ${skill.level}%`}
+                    />
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </Section>
+
+        <Section
+          title="IDIOMAS"
+          iconClass="fa-solid fa-earth-americas"
+          sectionClass="languages"
+        >
+          <ul class="skills-list pt-2 grid grid-cols-2">
+            {
+              cvData.languages.map((item) => (
+                <li class="skills-list__item">
+                  <span class="skills-list__name">{item.name}</span>
+                  <div class="skills-list__bar-container">
+                    <div
+                      class="skills-list__bar"
+                      style={`width: ${item.level}%`}
+                    />
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        </Section>
+
+        <Section
+          title="ESTUDIOS"
+          iconClass="fa-solid fa-book"
+          sectionClass="education"
+        >
+          <h4 class="education__title">{cvData.education.degree}</h4>
+          <p>{cvData.education.institution}</p>
+        </Section>
+
+        <Section
+          title="EXPERIENCIA"
+          iconClass="fa-solid fa-briefcase"
+          sectionClass="experience"
+        >
+          <ul class="experience-list">
+            {
+              cvData.experience.map(
+                (exp, index) =>
+                  index < 2 && (
+                    <li class="experience-list__item mt-3">
+                      <h4 class="experience-list__position">
+                        <span class="experience-list__company">
+                          {exp.company}
+                        </span>
+                        <p class="mt-1">
+                          {exp.position} - {exp.period}
+                        </p>
+                      </h4>
+                      <ul class="experience-list__responsibilities">
+                        {exp.responsibilities.map((resp) => (
+                          <li class="mb-1">{resp}</li>
+                        ))}
+                      </ul>
+                    </li>
+                  )
+              )
+            }
+          </ul>
+        </Section>
+      </div>
+
+      <div class="cv__content cv__content--right col-span-6">
+        <div>
+          <Section
+            title="EXPERIENCIA"
+            iconClass="fa-solid fa-briefcase"
+            sectionClass="experience"
+          >
+            <ul class="experience-list">
+              {
+                cvData.experience.map(
+                  (exp, index) =>
+                    index > 2 && (
+                      <li class="experience-list__item mt-3">
+                        <h4 class="experience-list__position">
+                          <span class="experience-list__company">
+                            {exp.company}
+                          </span>
+                          <p class="mt-1">
+                            {exp.position} - {exp.period}
+                          </p>
+                        </h4>
+                        <ul class="experience-list__responsibilities">
+                          {exp.responsibilities.map((resp) => (
+                            <li class="mb-1">{resp}</li>
+                          ))}
+                        </ul>
+                      </li>
+                    )
+                )
+              }
+            </ul>
+          </Section>
+
+          <Section
+            title="ALGUNOS LOGROS Y PROYECTOS"
+            iconClass="fa-solid fa-award"
+            sectionClass="projects"
+          >
+            <ul class="projects-list pt-2">
+              {
+                cvData.projects.map((project) => (
+                  <li class="projects-list__item mb-2">
+                    <a
+                      href={project}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="projects-list__link"
+                    >
+                      {project}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </Section>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<style is:global lang="scss">
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+  @import "../assets/reset.scss";
+  .cv {
+    background-color: #fff;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    height: 1756px;
+    max-height: 100%;
+    &__content-container {
+      padding: 0 55px 55px 55px;
+    }
+  }
+  .education {
+    &__title {
+      font-size: 18px;
+    }
+  }
+  .projects-list {
+    padding-left: 1rem;
+    &__link {
+      color: #000;
+      font-size: 18px;
+    }
+  }
+  .experience-list {
+    list-style: none;
+    padding-left: 0;
+    &__responsibilities {
+      padding-left: calc(1rem + 3.5px);
+      list-style: disc;
+    }
+    &__company {
+      font-size: 18px;
+    }
+  }
+  .skills-list {
+    padding-left: 0;
+    list-style: none;
+    column-gap: 1rem;
+    &__item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 10px;
+    }
+    &__name {
+      font-size: 14px;
+    }
+    &__bar-container {
+      max-width: 100%;
+      // width: 225px;
+      width: 104px;
+      height: 14px;
+      display: flex;
+      overflow: hidden;
+      border-radius: 0.25rem;
+      background-color: #929397;
+    }
+    &__bar {
+      height: 100%;
+      background-color: #c2c2c4;
+      transition: width 0.3s ease-in-out;
+    }
+  }
+  @import "../assets/fonts.scss";
+  //
+  .grid {
+    display: grid;
+  }
+  @for $i from 1 through 12 {
+    .grid-cols-#{$i} {
+      grid-template-columns: repeat(#{$i}, minmax(0, 1fr));
+    }
+  }
+  //
+  // col-auto
+  .col-auto {
+    grid-column: auto;
+  }
+
+  // col-span-{n}
+  @for $i from 1 through 12 {
+    .col-span-#{$i} {
+      grid-column: span #{$i} / span #{$i};
+    }
+  }
+
+  // col-span-full
+  .col-span-full {
+    grid-column: 1 / -1;
+  }
+
+  // col-start-{n}
+  @for $i from 1 through 13 {
+    .col-start-#{$i} {
+      grid-column-start: #{$i};
+    }
+  }
+
+  // col-start-auto
+  .col-start-auto {
+    grid-column-start: auto;
+  }
+
+  // col-end-{n}
+  @for $i from 1 through 13 {
+    .col-end-#{$i} {
+      grid-column-end: #{$i};
+    }
+  }
+
+  // col-end-auto
+  .col-end-auto {
+    grid-column-end: auto;
+  }
+
+  // *************************************************************************************
+  $spacer: 1rem;
+  $spacers: (
+    0: 0,
+    1: $spacer * 0.25,
+    2: $spacer * 0.5,
+    3: $spacer,
+    4: $spacer * 1.5,
+    5: $spacer * 3,
+  );
+  $sides: (
+    t: top,
+    b: bottom,
+    s: left,
+    e: right,
+    x: (
+      left,
+      right,
+    ),
+    y: (
+      top,
+      bottom,
+    ),
+    "": null,
+  );
+  @each $prefix in (m, p) {
+    @each $key, $value in $spacers {
+      @each $sideKey, $sideValue in $sides {
+        $prop: if($prefix == m, margin, padding);
+
+        @if $sideValue == null {
+          .#{$prefix}-#{$key} {
+            #{$prop}: #{$value} !important;
+          }
+        } @else if type-of($sideValue) == "list" {
+          .#{$prefix}#{$sideKey}-#{$key} {
+            @each $subSide in $sideValue {
+              #{$prop}-#{$subSide}: #{$value} !important;
+            }
+          }
+        } @else {
+          .#{$prefix}#{$sideKey}-#{$key} {
+            #{$prop}-#{$sideValue}: #{$value} !important;
+          }
+        }
+      }
+    }
+  }
+  .mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  $enable-negative-margins: true !default;
+  @if $enable-negative-margins {
+    @each $key, $value in $spacers {
+      @if $key != 0 {
+        @each $sideKey, $sideValue in $sides {
+          @if $sideValue != null and type-of($sideValue) != "list" {
+            .m#{$sideKey}-n#{$key} {
+              margin-#{$sideValue}: -#{$value} !important;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
