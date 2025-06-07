@@ -1,0 +1,13 @@
+---
+const { skills } = Astro.props;
+---
+<ul class="skills-list pt-2 grid grid-cols-2">
+  {skills.map((skill) => (
+    <li class="skills-list__item">
+      <span class="skills-list__name">{skill.name}</span>
+      <div class="skills-list__bar-container">
+        <div class="skills-list__bar" style={`width: ${skill.level}%`} />
+      </div>
+    </li>
+  ))}
+</ul>

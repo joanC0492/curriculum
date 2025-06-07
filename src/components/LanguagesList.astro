@@ -1,0 +1,13 @@
+---
+const { languages } = Astro.props;
+---
+<ul class="skills-list pt-2 grid grid-cols-2">
+  {languages.map((item) => (
+    <li class="skills-list__item">
+      <span class="skills-list__name">{item.name}</span>
+      <div class="skills-list__bar-container">
+        <div class="skills-list__bar" style={`width: ${item.level}%`} />
+      </div>
+    </li>
+  ))}
+</ul>

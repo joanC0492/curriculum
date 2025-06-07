@@ -1,0 +1,18 @@
+---
+const { experience } = Astro.props;
+---
+<ul class="experience-list">
+  {experience.map((exp) => (
+    <li class="experience-list__item mt-3">
+      <h4 class="experience-list__position">
+        <span class="experience-list__company">{exp.company}</span>
+        <p class="mt-1">{exp.position} - {exp.period}</p>
+      </h4>
+      <ul class="experience-list__responsibilities">
+        {exp.responsibilities.map((resp) => (
+          <li class="mb-1">{resp}</li>
+        ))}
+      </ul>
+    </li>
+  ))}
+</ul>

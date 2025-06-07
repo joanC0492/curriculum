@@ -4,6 +4,10 @@ import Layout from "../layouts/Layout.astro";
 import { cvData } from "../data/cvData.js";
 import CvHeader from "../components/CvHeader.astro";
 import Section from "../components/Section.astro";
+import SkillsList from "../components/SkillsList.astro";
+import LanguagesList from "../components/LanguagesList.astro";
+import ExperienceList from "../components/ExperienceList.astro";
+import ProjectsList from "../components/ProjectsList.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -14,7 +18,7 @@ import Section from "../components/Section.astro";
     <CvHeader personalInfo={cvData.personalInfo} />
 
     <div class="cv__content-container grid grid-cols-12">
-      <div class="cv__content cv__content--left col-span-6">
+      <div class="cv__content cv__content--left col-span-5">
         <Section
           title="PRESENTACIÓN"
           iconClass="fa-solid fa-user"
@@ -22,51 +26,20 @@ import Section from "../components/Section.astro";
         >
           <div set:html={cvData.personalInfo.presentation} />
         </Section>
-
         <Section
           title="HABILIDADES"
           iconClass="fa-solid fa-laptop-code"
           sectionClass="skills"
         >
-          <ul class="skills-list pt-2 grid grid-cols-2">
-            {
-              cvData.skills.map((skill) => (
-                <li class="skills-list__item">
-                  <span class="skills-list__name">{skill.name}</span>
-                  <div class="skills-list__bar-container">
-                    <div
-                      class="skills-list__bar"
-                      style={`width: ${skill.level}%`}
-                    />
-                  </div>
-                </li>
-              ))
-            }
-          </ul>
+          <SkillsList skills={cvData.skills} />
         </Section>
-
         <Section
           title="IDIOMAS"
           iconClass="fa-solid fa-earth-americas"
           sectionClass="languages"
         >
-          <ul class="skills-list pt-2 grid grid-cols-2">
-            {
-              cvData.languages.map((item) => (
-                <li class="skills-list__item">
-                  <span class="skills-list__name">{item.name}</span>
-                  <div class="skills-list__bar-container">
-                    <div
-                      class="skills-list__bar"
-                      style={`width: ${item.level}%`}
-                    />
-                  </div>
-                </li>
-              ))
-            }
-          </ul>
+          <LanguagesList languages={cvData.languages} />
         </Section>
-
         <Section
           title="ESTUDIOS"
           iconClass="fa-solid fa-book"
@@ -75,93 +48,43 @@ import Section from "../components/Section.astro";
           <h4 class="education__title">{cvData.education.degree}</h4>
           <p>{cvData.education.institution}</p>
         </Section>
-
         <Section
           title="EXPERIENCIA"
           iconClass="fa-solid fa-briefcase"
           sectionClass="experience"
         >
-          <ul class="experience-list">
-            {
-              cvData.experience.map(
-                (exp, index) =>
-                  index < 2 && (
-                    <li class="experience-list__item mt-3">
-                      <h4 class="experience-list__position">
-                        <span class="experience-list__company">
-                          {exp.company}
-                        </span>
-                        <p class="mt-1">
-                          {exp.position} - {exp.period}
-                        </p>
-                      </h4>
-                      <ul class="experience-list__responsibilities">
-                        {exp.responsibilities.map((resp) => (
-                          <li class="mb-1">{resp}</li>
-                        ))}
-                      </ul>
-                    </li>
-                  )
-              )
-            }
-          </ul>
+          <ExperienceList
+            experience={cvData.experience.slice(
+              0,
+              Math.ceil(cvData.experience.length / 2)
+            )}
+          />
         </Section>
       </div>
 
-      <div class="cv__content cv__content--right col-span-6">
+      <div class="line-time col-span-2">
+        <div class="timeline"></div>
+      </div>
+
+      <div class="cv__content cv__content--right col-span-5">
         <div>
           <Section
             title="EXPERIENCIA"
             iconClass="fa-solid fa-briefcase"
             sectionClass="experience"
           >
-            <ul class="experience-list">
-              {
-                cvData.experience.map(
-                  (exp, index) =>
-                    index > 2 && (
-                      <li class="experience-list__item mt-3">
-                        <h4 class="experience-list__position">
-                          <span class="experience-list__company">
-                            {exp.company}
-                          </span>
-                          <p class="mt-1">
-                            {exp.position} - {exp.period}
-                          </p>
-                        </h4>
-                        <ul class="experience-list__responsibilities">
-                          {exp.responsibilities.map((resp) => (
-                            <li class="mb-1">{resp}</li>
-                          ))}
-                        </ul>
-                      </li>
-                    )
-                )
-              }
-            </ul>
+            <ExperienceList
+              experience={cvData.experience.slice(
+                Math.ceil(cvData.experience.length / 2)
+              )}
+            />
           </Section>
-
           <Section
             title="ALGUNOS LOGROS Y PROYECTOS"
             iconClass="fa-solid fa-award"
             sectionClass="projects"
           >
-            <ul class="projects-list pt-2">
-              {
-                cvData.projects.map((project) => (
-                  <li class="projects-list__item mb-2">
-                    <a
-                      href={project}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="projects-list__link"
-                    >
-                      {project}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
+            <ProjectsList projects={cvData.projects} />
           </Section>
         </div>
       </div>
@@ -236,6 +159,35 @@ import Section from "../components/Section.astro";
       transition: width 0.3s ease-in-out;
     }
   }
+
+  //
+  .line-time {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .timeline {
+    top: 10px;
+    left: -12px;
+    position: relative;
+    width: 4px;
+    background-color: #c2c2c4;
+    height: calc(100% + -25px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px; // Espacio entre puntos, ajustalo a tu diseño
+    margin: 0 auto;
+    &__dot {
+      width: 14px;
+      height: 14px;
+      background-color: white;
+      border: 2px solid #555;
+      border-radius: 50%;
+      z-index: 1;
+    }
+  }
+  //
   @import "../assets/fonts.scss";
   //
   .grid {

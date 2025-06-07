@@ -1,0 +1,17 @@
+---
+const { projects } = Astro.props;
+---
+<ul class="projects-list pt-2">
+  {projects.map((project) => (
+    <li class="projects-list__item mb-2">
+      <a
+        href={project}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="projects-list__link"
+      >
+        {project}
+      </a>
+    </li>
+  ))}
+</ul>
